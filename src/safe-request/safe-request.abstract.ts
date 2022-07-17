@@ -1,12 +1,6 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import * as CircuitBreaker from 'opossum';
-
-type CBOptions = CircuitBreaker.Options & { logState?: boolean };
-
-type CONFIG = AxiosRequestConfig & {
-  circuitBreaker?: CBOptions;
-  responseLogging?: boolean;
-};
+import { CONFIG } from './safe-request.interface';
 
 export abstract class SafeRequest {
   abstract get<T>(url: string, config?: CONFIG): Promise<AxiosResponse<T>>;

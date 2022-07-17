@@ -1,16 +1,10 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import { AxiosResponse, Method } from 'axios';
 import * as CircuitBreaker from 'opossum';
 import urljoin from 'url-join';
 import { SafeRequest } from './safe-request.abstract';
-
-export type CBOptions = CircuitBreaker.Options & { logState?: boolean };
-
-export type CONFIG = AxiosRequestConfig & {
-  circuitBreaker?: CBOptions;
-  responseLogging?: boolean;
-};
+import { CBOptions, CONFIG } from './safe-request.interface';
 
 /**
  * make axios request with circuit breaker pattern
