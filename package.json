@@ -1,5 +1,5 @@
 {
-  "name": "@rgb/utils",
+  "name": "@rgb/safe-request",
   "version": "1.0.0",
   "description": "",
   "author": "Fauzi Fadhillah",
@@ -59,6 +59,10 @@
     "@nestjs/axios": "^0.1.0",
     "opossum": "^6.4.0"
   },
+  "files": [
+    "dist/"
+  ],
+  "main": "dist/index.js",
   "jest": {
     "moduleFileExtensions": [
       "js",
