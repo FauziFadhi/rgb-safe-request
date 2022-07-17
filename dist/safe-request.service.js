@@ -13,7 +13,7 @@ exports.SafeRequestService = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const CircuitBreaker = require("opossum");
-const url_join_1 = require("url-join");
+const urljoin = require('url-join');
 let SafeRequestService = class SafeRequestService {
     constructor(httpService) {
         this.httpService = httpService;
@@ -44,7 +44,7 @@ let SafeRequestService = class SafeRequestService {
     async request(...args) {
         const { circuitBreaker = {}, ...axiosConfig } = args.at(-1) || {};
         const { method, baseUrl } = axiosConfig || {};
-        const fullUrl = baseUrl ? (0, url_join_1.default)(baseUrl, args[0]) : args[0];
+        const fullUrl = baseUrl ? urljoin(baseUrl, args[0]) : args[0];
         return this.fireCircuitBreaker(fullUrl, circuitBreaker, method, ...args);
     }
     async fireCircuitBreaker(fullUrl, options = {}, method, ...args) {
