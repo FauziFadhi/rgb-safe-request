@@ -2,10 +2,10 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { AxiosResponse, Method } from 'axios';
 import * as CircuitBreaker from 'opossum';
+import urljoin from 'url-join';
 import { SafeRequest } from './safe-request.abstract';
 import { CBOptions, CONFIG } from './safe-request.interface';
 
-const urljoin = require('url-join');
 /**
  * make axios request with circuit breaker pattern
  */
