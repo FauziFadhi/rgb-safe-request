@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "author": "Fauzi Fadhillah",
-  "private": true,
+  "private": false,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
