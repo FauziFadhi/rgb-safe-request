@@ -56,7 +56,7 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@nestjs/axios": "0.7.0 >= ^0.1.0",
+    "@nestjs/axios": "^0.7.0 || ^0.1.0",
     "opossum": "^6.4.0"
   },
   "files": [
