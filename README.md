@@ -1,73 +1,64 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+### Description
+this module is extending from [@nestjs/axios](https://www.npmjs.com/package/@nestjs/axios) with circuit breaker pattern we use [opossum](https://github.com/nodeshift/opossum).
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+that make we can fail fast if the target are failed, and let them have some time to recover. if we try to make some new request at the time. we can fail fast without request to them.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+## How to Use
+import `SafeRequestModule` from `@rgb/safe-request` to module that you want to use request
+```
+// file user.module.ts
+@Module({
+  imports: [SafeRequestModule],
+  provider: [UserService],
+})
 ```
 
-## Running the app
+import `SafeRequest` from `@rgb/safe-request`, and inject to target class.
+```
+// file user.service.ts
 
-```bash
-# development
-$ npm run start
+@Injectable()
+export class UserService {
+  constructor(
+    private readonly httpService: SafeRequest,
+  ){}
+}
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+async getUsersFromProvider(id: number) {
+  const resp = await this.httpService.get('users', {
+    baseUrl: 'https://api-rgb.com,
+  })
+}
 ```
 
-## Test
+as you can see you just the function like you use httpService from `@nestjs/axios`. but with additional attribute `circuitBreaker` for circuit breaker config.
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+### Example
+```
+  const resp = await this.httpService.get('users', {
+    baseUrl: 'https://api-rgb.com,
+    circuitBreaker: { // <-- additional attribute for circuit breaker config
+      timeout: 3000,
+      errorThresholdPercentage: 40,
+    }
+  })
 ```
 
-## Support
+you can see other config at its documentation [opossum](https://github.com/nodeshift/opossum).
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+we make override some opossum config, these are the config that we overrided:
+```
+circuitBreaker: {
+  timeout: 1500,
+  errorThresholdPercentage: 51,
+  volumeThreshold: 3,
+  errorFilter: (err) => {
+    if (err.response?.status < 500) {
+      return true;
+    }
+    return false;
+  },
+}
+```
+you just put your config if you want to override this default config from this package. if you do not want to just let it be.
