@@ -3,6 +3,13 @@ this module is extending from [@nestjs/axios](https://www.npmjs.com/package/@nes
 
 that make we can fail fast if the target are failed, and let them have some time to recover. if we try to make some new request at the time. we can fail fast without request to them.
 
+## How To Install
+make sure you have [@nestjs/axios](https://www.npmjs.com/package/@nestjs/axios) installed in your package.json. minimum version `0.1.0`
+you can double check what is the newest version of this package and replace `#semver:^1.0.12` to the new version that you can see.
+
+```
+npm install @nestjs/axios git+ssh://git@github.com:FauziFadhi/rgb-safe-request.git#semver:^1.0.12
+```
 
 ## How to Use
 import `SafeRequestModule` from `@rgb/safe-request` to module that you want to use request
