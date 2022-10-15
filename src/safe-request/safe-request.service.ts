@@ -15,7 +15,7 @@ export class SafeRequestService implements SafeRequest {
   private cbInstance: Record<string, CircuitBreaker> = {};
 
   constructor(private readonly httpService: HttpService) {
-    this.logger = new Logger('CIRCUIT BREAKER');
+    this.logger = new Logger('Request Log');
   }
 
   /**
@@ -113,7 +113,7 @@ export class SafeRequestService implements SafeRequest {
         group: key,
         timeout: 1500,
         errorThresholdPercentage: 51,
-        volumeThreshold: 3,
+        volumeThreshold: 10,
         errorFilter: (err) => {
           if (err.response?.status < 500) {
             return true;
@@ -156,45 +156,45 @@ export class SafeRequestService implements SafeRequest {
     }
 
     const startTime = args[1]?.responseLogging ? new Date().getTime() : 0;
-    let responseData: unknown;
+    let logResponse: unknown;
 
     // cb.on('fallback',
     //   (data) => console.log(`FALLBACK: ${JSON.stringify(data)}`));
     return this.cbInstance[key]
       .fire(...args)
       .then((response: any) => {
-        responseData = response.data;
+        logResponse = response;
         return response;
       })
       .catch((e) => {
-        responseData = e.response?.data;
+        logResponse = e.response;
         const message = e.response?.message || e.message;
-        this.logger.error(message || e, e.stack);
+        this.logger.error(
+          `[Error] [${method}] Request ${url} ${JSON.stringify(message || e)}`,
+          e.stack,
+        );
         throw e;
       })
       .finally(() => {
+        const duration = new Date().getTime() - startTime;
         if (args[1]?.responseLogging) {
-          this.logging(startTime, ...args, responseData);
+          this.logger.log({
+            message: `[Info] [${method}] Request ${url}`,
+            config: args[1],
+            duration,
+            response: logResponse,
+            ...(args[1]?.logObject || {}),
+          });
         }
+
         if (options.logState) {
           this.logger.log({
-            message: `The state cb for ${url}`,
+            message: `[State] The state cb for ${url}`,
             state: (this.cbInstance[key] as any).toJSON(),
+            context: 'Circuit Breaker',
           });
           this.cbInstance[key];
         }
       }) as any;
-  }
-
-  private logging(startTime: number, ...args: any[]) {
-    const endTime = new Date().getTime();
-    const duration = endTime - startTime;
-
-    this.logger.log({
-      message: args[1]?.url,
-      config: args[1],
-      duration,
-      response: args.at(-1),
-    });
   }
 }

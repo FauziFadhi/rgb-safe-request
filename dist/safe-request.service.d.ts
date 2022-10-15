@@ -17,5 +17,4 @@ export declare class SafeRequestService implements SafeRequest {
     patch<T>(url: string, data?: unknown, config?: CONFIG): Promise<AxiosResponse<T>>;
     private request;
     private fireCircuitBreaker;
-    private logging;
 }
