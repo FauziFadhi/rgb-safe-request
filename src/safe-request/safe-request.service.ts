@@ -163,11 +163,11 @@ export class SafeRequestService implements SafeRequest {
     return this.cbInstance[key]
       .fire(...args)
       .then((response: any) => {
-        logResponse = response.data;
+        logResponse = response?.data;
         return response;
       })
       .catch((e) => {
-        logResponse = e.response.data;
+        logResponse = e.response?.data;
         const message = e.response?.message || e.message;
         this.logger.error(
           `[Error] [${method}] Request ${url} ${JSON.stringify(message || e)}`,

@@ -86,11 +86,11 @@ let SafeRequestService = class SafeRequestService {
         return this.cbInstance[key]
             .fire(...args)
             .then((response) => {
-            logResponse = response.data;
+            logResponse = response?.data;
             return response;
         })
             .catch((e) => {
-            logResponse = e.response.data;
+            logResponse = e.response?.data;
             const message = e.response?.message || e.message;
             this.logger.error(`[Error] [${method}] Request ${url} ${JSON.stringify(message || e)}`, e.stack);
             throw e;
