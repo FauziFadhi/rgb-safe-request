@@ -84,6 +84,7 @@ let SafeRequestService = class SafeRequestService {
         }
         const startTime = args[1]?.responseLogging ? new Date().getTime() : 0;
         let logResponse;
+        let stack;
         return this.cbInstance[key]
             .fire(...args)
             .then((response) => {
@@ -93,6 +94,7 @@ let SafeRequestService = class SafeRequestService {
             .catch((e) => {
             logResponse = e.response?.data;
             const message = e.response?.message || e.message;
+            stack = e.stack;
             this.logger.error(`[Error] [${method}] Request ${url} ${JSON.stringify(message || e)}`, e.stack);
             throw e;
         })
@@ -105,6 +107,7 @@ let SafeRequestService = class SafeRequestService {
                     config: args[1],
                     duration,
                     response: logResponse,
+                    stack,
                     ...(args[1]?.logObject || {}),
                 });
                 this.logger.log({

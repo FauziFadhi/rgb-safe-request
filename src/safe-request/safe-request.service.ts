@@ -158,6 +158,7 @@ export class SafeRequestService implements SafeRequest {
 
     const startTime = args[1]?.responseLogging ? new Date().getTime() : 0;
     let logResponse: unknown;
+    let stack: unknown;
 
     // cb.on('fallback',
     //   (data) => console.log(`FALLBACK: ${JSON.stringify(data)}`));
@@ -170,6 +171,7 @@ export class SafeRequestService implements SafeRequest {
       .catch((e) => {
         logResponse = e.response?.data;
         const message = e.response?.message || e.message;
+        stack = e.stack;
         this.logger.error(
           `[Error] [${method}] Request ${url} ${JSON.stringify(message || e)}`,
           e.stack,
@@ -185,6 +187,7 @@ export class SafeRequestService implements SafeRequest {
             config: args[1],
             duration,
             response: logResponse,
+            stack,
             ...(args[1]?.logObject || {}),
           });
           this.logger.log({
