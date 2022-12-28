@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AxiosResponse, Method } from 'axios';
 import * as CircuitBreaker from 'opossum';
 import urljoin from 'url-join';
+import { SafeRequestOptions } from './safe-request';
 import { SafeRequest } from './safe-request.abstract';
 import { CBOptions, CONFIG } from './safe-request.interface';
 
@@ -177,7 +178,15 @@ export class SafeRequestService implements SafeRequest {
       })
       .finally(() => {
         const duration = new Date().getTime() - startTime;
-        if (args[1]?.responseLogging) {
+        const showLog = args[1]?.responseLogging ?? SafeRequestOptions.showLog;
+        if (showLog) {
+          SafeRequestOptions.logging({
+            message: `[Info] [${method}] Request ${url}`,
+            config: args[1],
+            duration,
+            response: logResponse,
+            ...(args[1]?.logObject || {}),
+          });
           this.logger.log({
             message: `[Info] [${method}] Request ${url}`,
             config: args[1],

@@ -1,0 +1,1 @@
+{"version":3,"file":"safe-request.js","sourceRoot":"","sources":["../src/safe-request/safe-request.ts"],"names":[],"mappings":";;;AAAA,MAAa,kBAAkB;IAI7B,MAAM,CAAC,OAAO,CAAC,KAAc;QAC3B,IAAI,CAAC,kBAAkB,CAAC,OAAO;YAAE,OAAO;QAExC,IAAI,kBAAkB,CAAC,GAAG;YAAE,kBAAkB,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC;IAC5D,CAAC;CACF;AATD,gDASC"}
