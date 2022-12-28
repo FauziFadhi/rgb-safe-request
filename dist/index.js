@@ -17,4 +17,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./safe-request.module"), exports);
 __exportStar(require("./safe-request.abstract"), exports);
 __exportStar(require("./safe-request.interface"), exports);
+__exportStar(require("./safe-request.module-definition"), exports);
+__exportStar(require("./module-options.interface"), exports);
 //# sourceMappingURL=index.js.map
