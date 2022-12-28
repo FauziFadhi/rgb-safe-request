@@ -1,4 +1,5 @@
+import { ILogInterface } from './safe-request.model';
 export interface SafeRequestModuleOptions {
     logging?: boolean;
-    log?: (value: any) => void;
+    log?: (value: ILogInterface) => void;
 }

@@ -5,7 +5,7 @@ import * as CircuitBreaker from 'opossum';
 import urljoin from 'url-join';
 import { SafeRequest } from './safe-request.abstract';
 import { CBOptions, CONFIG } from './safe-request.interface';
-import { SafeRequestModel } from './sequelize-cache';
+import { SafeRequestModel } from './safe-request.model';
 
 /**
  * make axios request with circuit breaker pattern
@@ -156,7 +156,7 @@ export class SafeRequestService implements SafeRequest {
       };
     }
 
-    const startTime = args[1]?.responseLogging ? new Date().getTime() : 0;
+    const startTime = new Date().getTime();
     let logResponse: unknown;
     let stack: unknown;
 

@@ -15,12 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SafeRequestModuleService = void 0;
 const common_1 = require("@nestjs/common");
 const safe_request_module_definition_1 = require("./safe-request.module-definition");
-const sequelize_cache_1 = require("./sequelize-cache");
+const safe_request_model_1 = require("./safe-request.model");
 let SafeRequestModuleService = class SafeRequestModuleService {
     constructor(options) {
         this.options = options;
-        sequelize_cache_1.SafeRequestModel.log = options.log;
-        sequelize_cache_1.SafeRequestModel.showLog = options.logging;
+        safe_request_model_1.SafeRequestModel.log = options.log;
+        safe_request_model_1.SafeRequestModel.showLog = options.logging;
     }
 };
 SafeRequestModuleService = __decorate([

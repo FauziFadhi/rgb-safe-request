@@ -4,4 +4,4 @@ exports.SafeRequestModel = void 0;
 class SafeRequestModel {
 }
 exports.SafeRequestModel = SafeRequestModel;
-//# sourceMappingURL=sequelize-cache.js.map
+//# sourceMappingURL=safe-request.model.js.map
