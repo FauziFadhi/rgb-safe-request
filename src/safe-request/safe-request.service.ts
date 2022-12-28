@@ -6,6 +6,7 @@ import urljoin from 'url-join';
 import { SafeRequestOptions } from './safe-request';
 import { SafeRequest } from './safe-request.abstract';
 import { CBOptions, CONFIG } from './safe-request.interface';
+import { SafeRequestModule } from './safe-request.module';
 
 /**
  * make axios request with circuit breaker pattern
@@ -178,9 +179,9 @@ export class SafeRequestService implements SafeRequest {
       })
       .finally(() => {
         const duration = new Date().getTime() - startTime;
-        const showLog = args[1]?.responseLogging ?? SafeRequestOptions.showLog;
+        const showLog = args[1]?.responseLogging ?? SafeRequestModule.logging;
         if (showLog) {
-          SafeRequestOptions.logging({
+          SafeRequestModule.log({
             message: `[Info] [${method}] Request ${url}`,
             config: args[1],
             duration,

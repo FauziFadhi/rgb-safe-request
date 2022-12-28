@@ -14,7 +14,7 @@ const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const CircuitBreaker = require("opossum");
 const url_join_1 = require("url-join");
-const safe_request_1 = require("./safe-request");
+const safe_request_module_1 = require("./safe-request.module");
 let SafeRequestService = class SafeRequestService {
     constructor(httpService) {
         this.httpService = httpService;
@@ -98,9 +98,9 @@ let SafeRequestService = class SafeRequestService {
         })
             .finally(() => {
             const duration = new Date().getTime() - startTime;
-            const showLog = args[1]?.responseLogging ?? safe_request_1.SafeRequestOptions.showLog;
+            const showLog = args[1]?.responseLogging ?? safe_request_module_1.SafeRequestModule.logging;
             if (showLog) {
-                safe_request_1.SafeRequestOptions.logging({
+                safe_request_module_1.SafeRequestModule.log({
                     message: `[Info] [${method}] Request ${url}`,
                     config: args[1],
                     duration,
