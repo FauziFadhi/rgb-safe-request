@@ -14,6 +14,7 @@ const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const CircuitBreaker = require("opossum");
 const url_join_1 = require("url-join");
+const sequelize_cache_1 = require("./sequelize-cache");
 let SafeRequestService = class SafeRequestService {
     constructor(httpService) {
         this.httpService = httpService;
@@ -97,7 +98,15 @@ let SafeRequestService = class SafeRequestService {
         })
             .finally(() => {
             const duration = new Date().getTime() - startTime;
-            if (args[1]?.responseLogging) {
+            const showLog = args[1]?.responseLogging ?? sequelize_cache_1.SafeRequestModel.showLog;
+            if (showLog) {
+                sequelize_cache_1.SafeRequestModel.log({
+                    message: `[Info] [${method}] Request ${url}`,
+                    config: args[1],
+                    duration,
+                    response: logResponse,
+                    ...(args[1]?.logObject || {}),
+                });
                 this.logger.log({
                     message: `[Info] [${method}] Request ${url}`,
                     config: args[1],

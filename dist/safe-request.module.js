@@ -10,13 +10,18 @@ exports.SafeRequestModule = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const safe_request_abstract_1 = require("./safe-request.abstract");
+const safe_request_module_definition_1 = require("./safe-request.module-definition");
+const safe_request_module_service_1 = require("./safe-request.module-service");
 const safe_request_service_1 = require("./safe-request.service");
-let SafeRequestModule = class SafeRequestModule {
+let SafeRequestModule = class SafeRequestModule extends safe_request_module_definition_1.ConfigurableModuleClass {
 };
 SafeRequestModule = __decorate([
     (0, common_1.Module)({
         imports: [axios_1.HttpModule],
-        providers: [{ useClass: safe_request_service_1.SafeRequestService, provide: safe_request_abstract_1.SafeRequest }],
+        providers: [
+            { useClass: safe_request_service_1.SafeRequestService, provide: safe_request_abstract_1.SafeRequest },
+            safe_request_module_service_1.SafeRequestModuleService,
+        ],
         exports: [safe_request_abstract_1.SafeRequest],
     })
 ], SafeRequestModule);
