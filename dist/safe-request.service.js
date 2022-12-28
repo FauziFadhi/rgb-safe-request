@@ -102,7 +102,7 @@ let SafeRequestService = class SafeRequestService {
             const duration = new Date().getTime() - startTime;
             const showLog = args[1]?.responseLogging ?? sequelize_cache_1.SafeRequestModel.showLog;
             if (showLog) {
-                sequelize_cache_1.SafeRequestModel.log({
+                sequelize_cache_1.SafeRequestModel.log?.({
                     message: `[Info] [${method}] Request ${url}`,
                     config: args[1],
                     duration,

@@ -182,7 +182,7 @@ export class SafeRequestService implements SafeRequest {
         const duration = new Date().getTime() - startTime;
         const showLog = args[1]?.responseLogging ?? SafeRequestModel.showLog;
         if (showLog) {
-          SafeRequestModel.log({
+          SafeRequestModel.log?.({
             message: `[Info] [${method}] Request ${url}`,
             config: args[1],
             duration,
